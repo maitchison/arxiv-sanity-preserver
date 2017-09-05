@@ -72,8 +72,14 @@ if __name__ == "__main__":
 
   # -----------------------------------------------------------------------------
   # main loop where we fetch the new results
-  print('database has %d entries at start' % (len(db), ))
+  global original_entries_number 
+  original_entries_number = len(db)
+  print('database has %d entries at start' % (original_entries_number, ))
   num_added_total = 0
+  
+  if args.start_index == -1:
+    args.start_index = max(0, (original_entries_number // 100) * 100 - 100)
+  
   for i in range(args.start_index, args.max_index, args.results_per_iteration):
 
     print("Results %i - %i" % (i,i+args.results_per_iteration))
@@ -110,9 +116,11 @@ if __name__ == "__main__":
       print(response)
       break
 
+    """
     if num_added == 0 and args.break_on_no_added == 1:
       print('No new papers were added. Assuming no new papers exist. Exiting.')
       break
+    """
 
     print('Sleeping for %i seconds' % (args.wait_time , ))
     time.sleep(args.wait_time + random.uniform(0, 3))
